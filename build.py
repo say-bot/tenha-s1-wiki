@@ -102,10 +102,10 @@ GATE = '''<!doctype html>
   var P=JSON.parse(document.getElementById('payload').textContent);
   var b64d=function(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0);});};
   var f=document.getElementById('f'),pw=document.getElementById('pw'),err=document.getElementById('err'),btn=f.querySelector('button');
-  f.addEventListener('submit',function(e){
-    e.preventDefault(); err.textContent=''; btn.disabled=true; btn.textContent='여는 중…';
+  function unlock(secret){
+    btn.disabled=true; btn.textContent='여는 중…';
     var enc=new TextEncoder();
-    crypto.subtle.importKey('raw',enc.encode(pw.value),'PBKDF2',false,['deriveKey'])
+    return crypto.subtle.importKey('raw',enc.encode(secret),'PBKDF2',false,['deriveKey'])
     .then(function(km){
       return crypto.subtle.deriveKey(
         {name:'PBKDF2',salt:b64d(P.salt),iterations:P.it,hash:'SHA-256'},
@@ -117,11 +117,21 @@ GATE = '''<!doctype html>
     .then(function(buf){
       var html=new TextDecoder().decode(buf);
       document.open(); document.write(html); document.close();
-    })
-    .catch(function(){
+    });
+  }
+  f.addEventListener('submit',function(e){
+    e.preventDefault(); err.textContent='';
+    unlock(pw.value).catch(function(){
       err.textContent='암호가 올바르지 않습니다.'; btn.disabled=false; btn.textContent='열기'; pw.select();
     });
   });
+  /* 아카이브 등 신뢰된 페이지에서 #k=암호 로 열면 자동 해제 */
+  var m=(location.hash||'').match(/[#&]k=([^&]*)/);
+  if(m){
+    unlock(decodeURIComponent(m[1])).catch(function(){
+      btn.disabled=false; btn.textContent='열기';
+    });
+  }
 })();
 </script>
 </body>
