@@ -57,7 +57,7 @@ GATE = '''<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>시즌1 지휘부 위키 · 잠금</title>
+<title>천하결전 시즌1 위키 · 잠금</title>
 <style>
   :root{color-scheme:dark;}
   *{box-sizing:border-box;}
@@ -86,7 +86,7 @@ GATE = '''<!doctype html>
 <main>
   <div class="card">
     <div class="seal">🔒</div>
-    <h1>시즌1 지휘부 위키</h1>
+    <h1>천하결전 시즌1 위키</h1>
     <p>낙월 동맹 전용 · 암호를 입력하세요</p>
     <form id="f">
       <input id="pw" type="password" autocomplete="current-password" placeholder="암호" autofocus>
